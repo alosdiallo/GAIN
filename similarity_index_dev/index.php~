@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<?php 
+	session_start();
+	error_reporting(E_ALL);
+	require_once 'php/constants.php';
+?>
+<html lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<title>Similarity Index</title>
+		<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+		<script type="text/javascript" src="js/jquery.form.js"></script> 
+		<script type="text/javascript">
+			baseurl = "<?php echo $GLOBALS['url']?>";
+		</script>
+	</head>
+	<body>
+		<?php require($GLOBALS['directory']."html/loginControls.php");?>		
+		<hr>
+		<div id="navigation">
+			<BLOCKQUOTE>
+			<!--p><button type="button" onclick="window.location.href='createNewProject.php'">Create New Project</button></p-->
+				<p><b>Visualize Data</b></p>
+				<BLOCKQUOTE>
+					<p><button type="button" onclick="window.location.href='visualize_interactions_matrix.php'">View the Matrix</button></p>
+					<p><button type="button" onclick="window.location.href='visualize_interactions_network.php'">View the Network</button></p>
+					<p><button type="button" onclick="">Download Data</button></p>
+					<p><button type="button" onclick="">Upload Data</button></p>
+				</BLOCKQUOTE>
+				<p><b>Compare similarity between pairs of nodes</b></p>
+				<BLOCKQUOTE>
+					<p><button type="button" onclick="window.location.href='compareMetrics.php'">Compare Metrics!</button></p>
+					
+				</BLOCKQUOTE>
+				<p><b>Find Modules</b></p>
+				<BLOCKQUOTE>
+					<p><button type="button" onclick="window.location.href='visualize_similarity_matrix.php'">Visualize Heatmap and Network</button></p>
+				</BLOCKQUOTE>	
+			</BLOCKQUOTE>
+			
+			
+			
+			<!--p><button type="button" onclick="window.location.href='upload.php'">Upload Project Data</button></p>
+			<p><button type="button" onclick="window.location.href='visualize_interactions.php'">Visualize Interactions</button></p>
+			<p><button type="button" onclick="window.location.href='download.php'">Download</button></p>
+			<p><button type="button" onclick="window.location.href='similarity_network.php'">Similarity Network</button></p-->
+		</div>
+		
+	</body>
+</html>

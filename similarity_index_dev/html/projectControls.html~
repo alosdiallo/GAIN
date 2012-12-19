@@ -1,0 +1,28 @@
+<!-- Project Controls -->
+
+<div id="projectControls"> <!--style="display: none;"-->
+	<select id="projectChange">
+		<option value="none">Project Options</option>
+		<?php
+			$exclude_list = array(".", "..");
+			if(isset($_SESSION['user']) && isset($_SESSION['logged_on'])){
+				$userProjectDirectory = $GLOBALS['directory']."users/".$_SESSION['user']."/projects/";
+				if(is_dir($userProjectDirectory)){
+					$projects = array_diff(scandir($userProjectDirectory), $exclude_list);
+				}
+			}
+			
+			foreach ($projects as $project) {
+				
+				echo "<option ";
+				// If the project is the current project then make sure it is selected
+				if($project == $_SESSION['project']){
+					echo "selected='selected' ";
+				}
+				echo "value='".$project."'>".$project."</option>";
+			}
+		?>
+	</select>
+	<button type="button" onclick="changeProject()">Set as Working Project</button>
+</div>
+<!-- END Project Controls -->

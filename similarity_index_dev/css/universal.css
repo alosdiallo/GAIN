@@ -1,0 +1,171 @@
+.label{
+	
+}
+.input{
+	
+}
+
+.height100{height: 100%;}
+.height75{height: 75%;}
+.height50{height: 50%;}
+.height25{height: 25%;}
+
+.width10{width: 10%;}
+.width20{
+	width: 20%;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 11px;
+}
+.width25{width: 25%;}
+.width30{width: 30%;}
+.width40{width: 40%;}
+.width50{
+	width: 50%;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 11px;
+}
+.width60{width: 60%;}
+.width70{
+	width: 500px;
+}
+.width75{width: 75%;}
+.width80{width: 80%;}
+.width90{width: 90%;}
+.width100{
+	width: 740px;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 12px;
+}
+
+.margin0{
+	margin: 0px;
+	padding: 15px;
+}
+.margin5{margin: 5px;}
+.margin10{margin: 10px;}
+.margin15{
+	margin: 0px;
+}
+.margin20{margin: 20px;}
+.margin25{margin: 25px;}
+.margin30{margin: 30px;}
+.margin40{margin: 40px;}
+.margin50{
+	margin: 0px;
+	margin-bottom: 50px;
+}
+
+.padding0{
+	padding: 0px;
+	padding-left: 15px;
+}
+.padding5{
+	padding: 5px;
+	color: #900;
+	font-size: 10px;
+	font-family: Verdana, Geneva, sans-serif;
+}
+.padding10{padding: 10px;}
+.padding15{
+	padding: 0px;
+}
+.padding20{padding: 20px;}
+.padding25{padding: 25px;}
+.padding30{padding: 30px;}
+.padding40{padding: 40px;}
+.padding50{padding: 50px;}
+
+.floatL{
+	float:left;
+	font-size: 11px;
+}
+.floatR{
+	float:left;
+}
+
+.textCenter{
+	text-align: left;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 10px;
+	padding-left: 0px;
+	margin-bottom: 10px;
+}
+
+.relative{position:relative;}
+.absolute{position:absolute;}
+
+.bgblue{
+	background-color:#FFF;
+	color:white;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 10px;
+	margin-bottom: 15px;
+}
+.bgyellow{
+	background-color:#FFF;
+}
+.bgltgray{background-color:LightGray;}
+.bgltgrey{background-color:LightGrey;}
+
+.resize100{width: 100%;}
+.resize75{width: 75%;}
+.resize50{width: 50%;}
+.resize25{width: 25%;}
+
+
+#loginControls {
+font-size:10pt;
+font-family:Arial, Helvetica, sans-serif;
+color:#000000;
+text-align:left
+}
+
+#help_info{
+	font-family: Verdana, Geneva, sans-serif;
+	font-size:10pt;
+}
+
+#guide_master {
+font-size:10pt;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+#unclustered {
+font-size:10pt;
+font-family:Arial, Helvetica, sans-serif;
+color:#000000;
+text-align:center
+}
+#submit_jobD {
+	font-size:11px;
+}
+#submit_jobE {
+font-size:11pt;
+}
+#submit_jobF {
+font-size:11pt;
+}
+#submit_jobB {
+font-size:11pt;
+}
+#submit_jobC {
+font-size:11pt;
+}
+#submit_jobA {
+	font-size:11px;
+}
+#use_csi {
+	font-size:11px;
+}
+
+#sim_names{
+	font-size:11px;
+}
+
+#uploadForm{
+	font-size:11px;
+}
+
+#warning_m{
+font-size:11pt;
+}

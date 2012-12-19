@@ -1,0 +1,132 @@
+#!/opt/csw/bin/perl
+#!/opt/csw/bin/gs
+use Env qw(PATH);
+use strict;
+use warnings;
+use POSIX;
+use Data::Dumper;
+
+my($new_long_name,$pdf_loc_name,$file_name,$location_m,$png_loc_name,$pdf_den_name,$png_den_name,@temp,$index,$txt_un_name,$png_un_name);
+$file_name = $location_m = $new_long_name = $pdf_loc_name = $png_loc_name = $pdf_den_name = $png_den_name = $index = $txt_un_name = $png_un_name = 0;
+
+$file_name = $ARGV[0];
+$location_m = $ARGV[1];
+my $min_val = $ARGV[2];
+my $max_val = $ARGV[3];
+#$location_m =  "/heap/lab_website/similarity_index/users/tester/projects/arda/";
+
+print "$file_name \n";
+@temp = split(/\_/,$file_name);
+$index = $temp[0];
+
+
+chdir $location_m;
+my $data_result = 0;
+
+$new_long_name = $location_m.$file_name;
+$pdf_loc_name = $location_m."result.pdf";
+$png_loc_name = $location_m."result.png";
+$data_result = $location_m."data_result4.txt";
+$pdf_den_name = $location_m."dendrogram.pdf";
+$png_den_name = $location_m.$index."_dendrogram.png";
+$txt_un_name = $location_m.$index."_headered.txt";
+$png_un_name = $location_m.$index."_headered.png";
+
+system ("/heap/opt/bin/Rscript /heap/lab_website/similarity_index/scripts/cluster_matrix.r $file_name");
+system ("chmod 777 result.pdf");
+system ("chmod 777 dendrogram.pdf");
+
+
+# generating the heatmap png image
+my $file_name = $location_m."result.pdf";
+ if (-e $file_name) {
+ print "\n\n result.pdf Exists!\n\n";
+ } 
+#system ("/opt/csw/bin/gs -sDEVICE=pngalpha -sOutputFile=$png_loc_name -r144 $pdf_loc_name");
+
+system("/opt/csw/bin/convert ".$pdf_loc_name ." -resize 25% ".$png_loc_name);
+# generating the heatmap png image
+
+# generating the dendrogram png image
+my $filename_den =  $location_m."dendrogram.pdf";
+ if (-e $filename_den) {
+ print "\n\n dendrogram.pdf Exists!\n\n";
+ } 
+#system ("/opt/csw/bin/gs -sDEVICE=pngalpha -sOutputFile=$png_den_name -r144 $pdf_den_name");
+
+system("/opt/csw/bin/convert ".$pdf_den_name ." -resize 25% ".$png_den_name);
+# generating the dendrogram png image
+
+# Generating the text file that can be used to make the heatmap image
+open(OUT,">"."data_final.txt");
+my $input_matrix = $data_result;
+my ($j,$line,$i,$size,@row_array,$m,$l,@main_2D_array);
+$j=$line=$i=$size=$m=$l = 0;
+
+open (MATRIX, $input_matrix) or die $!;
+while($line = <MATRIX>){               
+    chomp($line); 
+    @row_array = split(" ", $line);
+    $j=0;
+    foreach my $element (@row_array){
+		$main_2D_array[$i][$j++] = $element;
+    }
+    $i++;
+}
+$size = scalar @row_array;
+close (MATRIX);
+for($l=0; $l<$i; $l++){
+	for($m=0; $m<$j; $m++){
+
+		print OUT "$main_2D_array[$l][$m]\t";
+
+	}
+	print OUT "\n";
+}
+
+
+if($index eq 'pearson'){
+	$min_val = ($max_val * -1);
+	# Generating the text file that can be used to make the heatmap image
+	system("/usr/local/bin/matrix2png -data data_final.txt -bkgcolor white -mincolor darkblue -midcolor white -maxcolor darkred -missingcolor grey -s -d -r -c -size 8:8 -range $min_val:$max_val -g -u > result_image.png");
+	system("/usr/local/bin/matrix2png -data $txt_un_name -bkgcolor white -mincolor darkblue -midcolor white -maxcolor darkred -missingcolor grey -s -d -r -c -size 8:8 -range $min_val:$max_val -g -u > $png_un_name");
+
+}
+else{
+	# Generating the text file that can be used to make the heatmap image
+	system("/usr/local/bin/matrix2png -data data_final.txt -bkgcolor white -mincolor white -maxcolor darkred -missingcolor grey -s -d -r -c -size 8:8 -range $min_val:$max_val -g -u > result_image.png");
+	system("/usr/local/bin/matrix2png -data $txt_un_name -bkgcolor white -mincolor white -maxcolor darkred -missingcolor grey -s -d -r -c -size 8:8 -range $min_val:$max_val -g -u > $png_un_name");
+
+}
+
+if (-d "download") {
+	system("cp result_image.png ./download");
+	system("cp $png_un_name ./download");	
+	system("cp $png_den_name ./download");
+	system("cp $png_loc_name ./download");
+	system("zip -9 -r download.zip download");
+	
+	
+}
+elsif (-e "download") {
+  
+	system("mkdir download");
+	system("cp result_image.png ./download");
+	system("cp $png_un_name ./download");	
+	system("cp $png_den_name ./download");
+	system("zip -9 -r download.zip download");	
+}
+else {
+    system("mkdir download");
+	system("cp result_image.png ./download");
+	system("cp $png_un_name ./download");
+	system("cp $png_den_name ./download");	
+	system("zip -9 -r download.zip download");
+	
+}
+
+close (OUT);
+
+	
+	
+	

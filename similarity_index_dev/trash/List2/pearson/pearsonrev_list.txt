@@ -1,0 +1,17 @@
+tf_FOZI-1	tf_FOZI-1	1
+tf_FOZI-1	tf_MIG-5	1
+tf_FOZI-1	tf_TBX-8	0.188982
+tf_MIG-5	tf_FOZI-1	1
+tf_MIG-5	tf_MIG-5	1
+tf_MIG-5	tf_TBX-8	0.188982
+tf_TBX-8	tf_FOZI-1	0.188982
+tf_TBX-8	tf_MIG-5	0.188982
+tf_TBX-8	tf_TBX-8	1
+tf_TBX-8	tf_DIE-1	0.188982
+tf_DIE-1	tf_TBX-8	0.188982
+tf_DIE-1	tf_DIE-1	1
+tf_F10B5.3	tf_F10B5.3	1
+tf_F10B5.3	tf_PQM-1	1
+tf_PQM-1	tf_F10B5.3	1
+tf_PQM-1	tf_PQM-1	1
+tf_NHR-20	tf_NHR-20	1

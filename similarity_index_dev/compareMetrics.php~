@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<?php 
+	session_start();
+	error_reporting(E_ALL);
+	require_once 'php/constants.php';
+?>
+<html lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<title>Similarity Index</title>
+	</head>
+	<body>
+		<?php require($GLOBALS['directory']."html/loginControls.php");?>	
+		<?php require($GLOBALS['directory']."html/backToHomeButton.html");?>		
+		<hr>
+			<?php require($GLOBALS['directory']."html/projectControls.html");?>
+		<hr>
+		<p> In this section you can upload a list of node-pairs for which you want to interrogate their similarity.</p>
+		<div id="uploadForm">
+			<form action="php/uploadFile_compareMetricsList_server.php" method="post" enctype="multipart/form-data">
+				<input type="hidden" name="upload_filenameOnServer" value="<?php echo $GLOBALS['compareMetricsListFileName'];?>" />
+				<label for="listName">List name:</label> <input type="text" name="listName">
+				<label for="file">Filename:</label><input type="file" name="fileToBeUploaded" id="fileToBeUploaded" />
+				<input type="submit" name="submit" value="Upload" />
+			</form>
+			
+		</div>
+		<hr>
+		<br><br><br>
+		<hr>
+		<div id="metric_checkboxes">
+			<input type="checkbox" id="Hypergeometric"/> Hypergeometric
+			<input type="checkbox" id="Geometric"/> Geometric
+			<input type="checkbox" id="Pearson"/> Pearson
+			<input type="checkbox" id="Jaccard"/> Jaccard
+			<input type="checkbox" id="Simpson"/> Simpson
+			<input type="checkbox" id="Cosine"/> Cosine
+		</div>
+		<hr>
+		<div id="lists">
+			
+		</div>
+		<hr>
+		<!--button type="button" onclick="">Upload</button-->
+		
+		<p><button type="button" onclick="window.location.href='questionnaire.php'">Need Help</button></p>
+		<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+		<script type="text/javascript" src="js/jquery.form.js"></script> 
+		<script type="text/javascript">
+			baseurl = "<?php echo $GLOBALS['url']?>";
+		</script>
+		<script>
+			function populateLists(){
+				$.ajax({
+					url : 'php/getCompareMetricLists.php',
+					type : 'post',
+					data : {},
+					success : function(answer){
+						var returnAr = eval(answer);
+						var lists = returnAr[0];
+						var download_ready = returnAr[1];
+
+						str = "";
+						for(var i in lists){
+							str = str + "List Name: "+lists[i]+" | ";
+							
+							str = str + '<button type="button" onclick="createFileMetrics('+"'"+lists[i]+"'"+')">Run</button>';
+							
+							if(download_ready[i]){
+								//str = str + '  <a href="'+download_ready[i]+'">Download (Right Click -> Save as)</a>'; 
+								str = str + '<button type="button" onclick="downloadFile('+"'"+download_ready[i]+"'"+')">Download</button>';
+							}
+							str = str + '<br>';
+						}
+						
+						$("#lists").html(str);
+					}
+				})
+			}
+		</script>
+		<script>
+			function downloadFile(url){
+				//location.href=url;	
+				window.location.reload(url);
+			}
+		
+			var $idown;  // Keep it outside of the function, so it's initialized once.
+			function downloadURL(url){
+				if ($idown) {
+					$idown.attr('src',url);
+				} else {
+					$idown = $('<iframe>', { id:'idown', src:url }).hide().appendTo('body');
+				}
+			}
+		</script>
+		<script>
+			$(document).ready(function(){ 
+				setupAjaxForm('form');
+				populateLists();
+			})
+			
+			
+			
+			function setupAjaxForm(identifier){
+				$(identifier).ajaxForm({
+					beforeSubmit: function() {},
+					success: showResponse
+				});
+			}
+
+			function showResponse(answer){
+				if(answer == "ERROR"){
+					alert("There was an error with the file upload.");
+				} else if (answer == "ERROR_FILE_MOVE"){
+					alert("There was an error with the file upload. The file was unable to move.");
+				} else if (answer == "NO_PROJECT"){
+					alert("Please make sure you have a project selected.");
+				} else if (answer == "NO LIST"){
+					alert("Please make sure that your list name is not blank");
+				} else if (answer == "SUCCESS"){
+					populateLists();
+				}
+			}
+		</script>
+			
+		<script>
+			function createFileMetrics(list){
+				hypergeometric = $('#Hypergeometric').is(":checked");
+				geometric = $('#Geometric').is(":checked");
+				pearson = $('#Pearson').is(":checked");
+				jaccard = $('#Jaccard').is(":checked");
+				simpson = $('#Simpson').is(":checked");
+				cosine = $('#Cosine').is(":checked");
+
+				$.ajax({
+					url : 'php/createFileMetrics_ajax_server.php',
+					type : 'post',
+					data : 	{ 
+									hypergeometric: hypergeometric,
+									geometric: geometric,
+									pearson: pearson,
+									jaccard: jaccard,
+									simpson: simpson,
+									cosine: cosine,
+									list: list
+								},
+					success : function(answer){
+						populateLists();
+					}
+				})
+			}
+		</script>
+		
+		
+	</body>
+</html>

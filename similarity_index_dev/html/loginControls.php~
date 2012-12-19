@@ -1,0 +1,6 @@
+<div id="loginControls">
+	<?php if(isset($_SESSION['logged_on'])){echo "user: ".$_SESSION['user']."<br>";}?>
+			
+	<!-- If user is logged in, show logout button, otherwise, show the login button so we can get the user logged in-->
+	<button type="button" onclick="window.location.href='<?php if(isset($_SESSION['logged_on'])){echo "php/logout_server.php";}else{echo "login.php";}?>'"><?php if(isset($_SESSION['logged_on'])){echo "Logout";}else{echo "Login";}?></button>
+</div>

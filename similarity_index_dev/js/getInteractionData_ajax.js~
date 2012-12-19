@@ -1,0 +1,22 @@
+var geneList1;
+var geneList2;
+var interactions;
+		
+function getInteractionData_ajax(){
+	$.ajax({
+		url : 'php/readInteractionFile_server.php',
+		type : 'post',
+		data : {},
+		success : function(answer){
+			response = eval( "(" + answer + ")" );
+			if(!response || response == "false"){
+				interactionDataResponseFailure();
+			}
+			geneList1 = response['geneList1'];
+			geneList2 = response['geneList2'];
+			interactions = response['interactions'];
+			
+			interactionDataResponseSuccess();
+		}
+	});
+}

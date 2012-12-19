@@ -1,0 +1,13 @@
+C18A11.1	tf_FOZI-1	1
+C18A11.1	tf_MIG-5	1
+C18A11.1	tf_TBX-8	1
+C49C3.5	tf_TBX-8	1
+ttr-21	tf_TBX-8	1
+F52B11.5	tf_TBX-8	1
+ZK682.5	tf_TBX-8	1
+ceh-43	tf_TBX-8	1
+ceh-5	tf_TBX-8	1
+ttr-21	tf_DIE-1	1
+R06F6.6	tf_F10B5.3	1
+R06F6.6	tf_PQM-1	1
+ZK287.1	tf_NHR-20	1

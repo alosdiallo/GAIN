@@ -1,0 +1,89 @@
+#! /usr/bin/perl
+
+#*********************************************************************************************
+#
+# Written by Alos Diallo, Walhout Lab
+# This program will take in a matrix an generate a pearson matrix as a result.
+#
+# Requirments 
+#	Perl, R,  
+#	Perl packages warnings, strict, List::Util qw(min max)	
+# References
+# 	
+#	http://stat.ethz.ch/R-manual/R-patched/library/base/html/matmult.html
+#*********************************************************************************************
+use warnings;
+use strict;
+
+
+sub toy_matrix(){
+	my $matrix_name = $ARGV[0];
+	my $location_m = 0;
+	$location_m = $ARGV[1];
+	print "$location_m\n";
+	chdir $location_m;
+	open TOY, "$matrix_name" or die $!;
+
+	my ($line,$i,$k,$j,$element,$l,$w,$holder,$myPval,$size);
+	my (@main_2D_array,@row_array,@pears,@parent);
+	$holder = "@";
+	$line=$i=$k=$j=$element=$myPval=$size=0;
+	open(OUT,">"."pear_data.txt");
+	while($line = <TOY>){ 
+		# Chop off new line character, skip the comments and empty lines.                 
+		chomp($line); 
+		@row_array = split(/\t/, $line);
+	   $j=0;
+		foreach $element (@row_array){
+			$main_2D_array[$i][$j++] =$element;
+			print OUT "$element\t";
+		}
+		$i++;
+		print OUT "\n";
+	}
+	
+	$myPval = `/heap/opt/bin/Rscript /heap/lab_website/similarity_index/scripts/pears.r`;
+	# for($l=0; $l<$i; $l++){
+		# for($w=0; $w<@row_array; $w++){
+			# $holder = "$holder\t$main_2D_array[$l][$w]";
+		# }
+		# $holder = (split(/@/, $holder))[1];
+		# $parent[$l] = $holder;
+		# $holder = "@";
+	# }
+	
+	# for($l=0; $l<$i; $l++){
+		# $k = $parent[$l];
+		# for($w=0; $w<$i; $w++){
+			# open(ONE,">"."one.txt");
+			# open(TWO,">"."two.txt");
+			# $j = $parent[$w];
+			# print ONE "$k";
+			# print TWO "$j";
+			 # $myPval = `/heap/opt/bin/Rscript /heap/lab_website/similarity_index/scripts/pears.r`;
+			 # chomp $myPval;
+			 # $pears[$l][$w] = (split(/\s+/, $myPval))[1];
+		
+		# }
+	
+	# }
+	
+
+	# open(OUT,">"."pear_result.txt");
+	# for($l=0; $l<$i; $l++){
+		# for($w=0; $w<$i; $w++){
+					
+			# print OUT "$pears[$l][$w]\t";
+		
+		# }
+		# print OUT "\n";
+	# }
+	close (OUT);
+	close (TOY);
+	# close (ONE);
+	# close (TWO);
+
+}
+
+
+()=&toy_matrix();

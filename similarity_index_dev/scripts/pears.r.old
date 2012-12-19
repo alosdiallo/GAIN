@@ -1,0 +1,4 @@
+a <- scan("one.txt");
+b <- scan("two.txt");
+result <- cor(a,b, method = "pearson")
+result

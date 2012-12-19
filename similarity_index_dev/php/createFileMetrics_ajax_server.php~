@@ -1,0 +1,175 @@
+<?php
+	session_start();
+	error_reporting(E_ALL);
+	require_once 'constants.php';
+	require_once 'runScript_server.php';
+	ini_set('display_errors', 1);
+
+	$user = $_SESSION['user'];
+	$project = $_SESSION['project'];
+
+	$list = $_POST['list'];
+
+	$hypergeometric = $_POST['hypergeometric'];
+	$geometric = $_POST['geometric'];
+	$pearson = $_POST['pearson'];
+	$jaccard = $_POST['jaccard'];
+	$simpson = $_POST['simpson'];
+	$cosine = $_POST['cosine'];
+	
+	
+	$directory = $GLOBALS['directory']."users/".$user."/projects/".$project."/";
+	$outputHandle = fopen($directory."lists/".$list."/download.csv", "w");
+
+	// Gene 1 Gene 2 in header
+	fwrite($outputHandle, "Gene1\tGene2");
+
+	// Ok, Let's run the full correlation script and grab the lists we need.. Also set up the header!
+	if($hypergeometric == "true"){
+		runCorrelationScript($user, $project, "hyper.pl");
+		$hypergeometric_list = loadListValues($directory."hypergeometric/hypergeometric_list.txt");
+		createAssociationPartialFromArray($directory, $list, $hypergeometric_list, "hypergeometric");
+		fwrite($outputHandle, "\tHypergeometric");
+	}
+	if($geometric == "true"){
+		runCorrelationScript($user, $project, "geo.pl");
+		$geometric_list = loadListValues($directory."geometric/geometric_list.txt");
+		createAssociationPartialFromArray($directory, $list, $geometric_list, "geometric");
+		fwrite($outputHandle, "\tGeometric");
+	}
+	if($pearson == "true"){
+		runCorrelationScript($user, $project, "pearson.pl");
+		$pearson_list = loadListValues($directory."pearson/pearson_list.txt");
+		createAssociationPartialFromArray($directory, $list, $pearson_list, "pearson");
+		fwrite($outputHandle, "\tPearson");
+	}
+	if($jaccard == "true"){
+		runCorrelationScript($user, $project, "jaccard.pl");
+		$jaccard_list = loadListValues($directory."jaccard/jaccard_list.txt");
+		createAssociationPartialFromArray($directory, $list, $jaccard_list, "jaccard");
+		fwrite($outputHandle, "\tJaccard");
+	}
+	if($simpson == "true"){
+		runCorrelationScript($user, $project, "mm.pl");
+		$simpson_list = loadListValues($directory."simpson/simpson_list.txt");
+		createAssociationPartialFromArray($directory, $list, $simpson_list, "simpson");
+		fwrite($outputHandle, "\tSimpson");
+	}
+	if($cosine == "true"){
+		runCorrelationScript($user, $project, "c_index.pl");	
+		$cosine_list = loadListValues($directory."cosine/cosine_list.txt");
+		createAssociationPartialFromArray($directory, $list, $cosine_list, "cosine");
+		fwrite($outputHandle, "\tCosine");
+	}
+	
+	fwrite($outputHandle, "\n");
+	// Header end!
+	
+	
+	
+	// Output file
+	if(file_exists($directory."lists/".$list."/list.txt")){
+		$inputHandle = fopen($directory."lists/".$list."/list.txt", "r");
+		
+		while (($buffer = fgets($inputHandle, 4096)) !== false) {
+				$buffer = trim($buffer);
+				$bufferArray = explode("\t", $buffer);
+				#$bufferArray[0] & $bufferArray[1] = gene names
+
+				fwrite($outputHandle, $bufferArray[0]."\t".$bufferArray[1]);
+			
+				
+				
+				if($hypergeometric == "true"){
+					if(isset($hypergeometric_list[$bufferArray[0].":".$bufferArray[1]])){
+						fwrite($outputHandle, "\t".$hypergeometric_list[$bufferArray[0].":".$bufferArray[1]]);
+					} else {
+						fwrite($outputHandle, "\t");
+					}
+				}
+				if($geometric == "true"){
+					if(isset($geometric_list[$bufferArray[0].":".$bufferArray[1]])){
+						fwrite($outputHandle, "\t".$geometric_list[$bufferArray[0].":".$bufferArray[1]]);
+					} else {
+						fwrite($outputHandle, "\t");
+					}
+				}
+				if($pearson == "true"){
+					if(isset($pearson_list[$bufferArray[0].":".$bufferArray[1]])){
+						fwrite($outputHandle, "\t".$pearson_list[$bufferArray[0].":".$bufferArray[1]]);
+					} else {
+						fwrite($outputHandle, "\t");
+					}
+				}
+				if($jaccard == "true"){
+					if(isset($jaccard_list[$bufferArray[0].":".$bufferArray[1]])){
+						fwrite($outputHandle, "\t".$jaccard_list[$bufferArray[0].":".$bufferArray[1]]);
+					} else {
+						fwrite($outputHandle, "\t");
+					}
+				}
+				if($simpson == "true"){
+					if(isset($simpson_list[$bufferArray[0].":".$bufferArray[1]])){
+						fwrite($outputHandle, "\t".$simpson_list[$bufferArray[0].":".$bufferArray[1]]);
+					} else {
+						fwrite($outputHandle, "\t");
+					}
+				}
+				if($cosine == "true"){
+					if(isset($cosine_list[$bufferArray[0].":".$bufferArray[1]])){
+						fwrite($outputHandle, "\t".$cosine_list[$bufferArray[0].":".$bufferArray[1]]);
+					} else {
+						fwrite($outputHandle, "\t");
+					}
+				}
+				
+				fwrite($outputHandle, "\n");
+				
+				
+				//$array[$bufferArray[0].":".$bufferArray[1]] = $bufferArray[2];
+		}
+		
+		fclose($inputHandle);
+	}
+	
+	fclose($outputHandle);
+
+
+	function createAssociationPartialFromArray($directory, $list, $array, $baseName){
+		$outputHandle = fopen($directory."lists/".$list."/".$baseName."_association_partial.txt", "w");
+		if(file_exists($directory."lists/".$list."/list.txt")){
+			$inputHandle = fopen($directory."lists/".$list."/list.txt", "r");
+			while (($buffer = fgets($inputHandle, 4096)) !== false) {
+					$buffer = trim($buffer);
+					$bufferArray = explode("\t", $buffer);
+					#$bufferArray[0] & $bufferArray[1] = gene names	
+
+					if(isset($array[$bufferArray[0].":".$bufferArray[1]])){
+						
+						fwrite($outputHandle, $array[$bufferArray[0].":".$bufferArray[1]]."\n");
+					}
+			}
+			fclose($inputHandle);
+		}
+		fclose($outputHandle);
+	}
+	function loadListValues($list){
+		$array = array();
+
+		if(file_exists($list)){
+			$handle = fopen($list, "r");
+			
+			while (($buffer = fgets($handle, 4096)) !== false) {
+				$buffer = trim($buffer);
+				$bufferArray = explode("\t", $buffer);
+				#$bufferArray[0] & $bufferArray[1] = gene names
+				#$bufferArray[2] = score
+				
+				$array[$bufferArray[0].":".$bufferArray[1]] = $bufferArray[2];
+			}
+			
+			fclose($handle);
+		}
+		return $array;
+	}
+?>
