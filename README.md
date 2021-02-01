@@ -12,3 +12,5 @@ Cosine
 Geometric
 
 The site supports uploads in the form of a matrix and a list.  It was develpoed on a machine running Solaris.  
+https://www.nature.com/articles/nmeth.2728
+
